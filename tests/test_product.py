@@ -1,5 +1,7 @@
 from unittest.mock import patch
 
+import pytest
+
 from src.product import Product
 
 
@@ -27,6 +29,13 @@ def test_product_new_product_with_list(data, list_products):
     assert result.name == "Samsung Galaxy C23 Ultra"
     assert result.quantity == 10
     assert result.price == 185000.0
+
+
+def test_product_new_product_error(list_products):
+    data = "Samsung Galaxy S23 Ultra; 256GB, Серый цвет, 200MP камера; 10; 185000.0"
+    with pytest.raises(ValueError) as ex:
+        Product.new_product(data, list_products)
+    assert str(ex.value) == 'Новый продукт должен быть типа "dict", Вы добавили <class \'str\'>'
 
 
 def test_product_price_setter_new_price(first_product):

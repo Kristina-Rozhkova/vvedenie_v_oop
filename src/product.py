@@ -1,4 +1,4 @@
-from typing import Any, List, Self
+from typing import Any, List
 
 
 class Product:
@@ -16,21 +16,25 @@ class Product:
         self.quantity = quantity
 
     @classmethod
-    def new_product(cls, user_product: dict, products: List[Any] =None):
-        name = user_product["name"]
-        description = user_product["description"]
-        price = user_product["price"]
-        quantity = user_product["quantity"]
+    def new_product(cls, user_product: dict, products: List[Any] = None):
+        if isinstance(user_product, dict):
+            name = user_product["name"]
+            description = user_product["description"]
+            price = user_product["price"]
+            quantity = user_product["quantity"]
 
-        if products:
-            for product in products:
-                if product.name == name:
-                    product.quantity += quantity
-                    if product.price < price:
-                        product.price = price
-                    return product
+            if products:
+                for product in products:
+                    if product.name == name:
+                        product.quantity += quantity
+                        if product.price < price:
+                            product.price = price
+                        return product
 
-        return cls(name, description, price, quantity)
+            return cls(name, description, price, quantity)
+
+        type_new_product = type(user_product)
+        raise ValueError(f'Новый продукт должен быть типа "dict", Вы добавили {type_new_product}')
 
     @property
     def price(self):
