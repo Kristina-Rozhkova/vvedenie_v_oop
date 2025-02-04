@@ -1,6 +1,6 @@
 import os
 
-from src.utils import read_json, create_objects_from_data
+from src.utils import create_objects_from_data, read_json
 
 
 def test_read_json(return_data):
@@ -26,7 +26,7 @@ def test_create_objects_from_data(return_data):
     result = create_objects_from_data(return_data)
 
     assert result[0].name == "Смартфоны"
-    assert result[0].products[0] == {
+    assert result[0].products_in_list[0] == {
         "name": "Samsung Galaxy C23 Ultra",
         "description": "256GB, Серый цвет, 200MP камера",
         "price": 180000.0,
