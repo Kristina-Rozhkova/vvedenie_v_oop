@@ -1,3 +1,5 @@
+import pytest
+
 from src.product import Product
 
 
@@ -33,3 +35,20 @@ def test_category_products(category):
     )
 
     assert information == return_str
+
+
+def test_category_str(category):
+    assert str(category) == "Смартфоны, количество продуктов: 27 шт."
+
+
+def test_product_iterator(product_iterator):
+    assert product_iterator.index == 0
+    assert next(product_iterator).name == "Samsung Galaxy S23 Ultra"
+    assert next(product_iterator).name == "Iphone 15"
+    assert next(product_iterator).name == "Xiaomi Redmi Note 11"
+
+    with pytest.raises(StopIteration):
+        next(product_iterator)
+
+    iterator = product_iterator.__iter__()
+    assert product_iterator.index == 0
