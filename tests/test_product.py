@@ -35,7 +35,7 @@ def test_product_new_product_error(list_products):
     data = "Samsung Galaxy S23 Ultra; 256GB, Серый цвет, 200MP камера; 10; 185000.0"
     with pytest.raises(ValueError) as ex:
         Product.new_product(data, list_products)
-    assert str(ex.value) == 'Новый продукт должен быть типа "dict", Вы добавили <class \'str\'>'
+    assert str(ex.value) == "Новый продукт должен быть типа \"dict\", Вы добавили <class 'str'>"
 
 
 def test_product_price_setter_new_price(first_product):
@@ -53,3 +53,12 @@ def test_product_price_setter_negative_price(capsys, first_product):
     first_product.price = -100
     message = capsys.readouterr()
     assert message.out.strip() == "Цена не должна быть нулевая или отрицательная"
+
+
+def test_product_str(first_product):
+    assert str(first_product) == "Samsung Galaxy S23 Ultra, 180000.0 руб. Остаток: 5 шт."
+
+
+def test_product_add(first_product, second_product):
+    result = first_product + second_product
+    assert result == 2580000.0
