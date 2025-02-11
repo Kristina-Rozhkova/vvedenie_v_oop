@@ -1,5 +1,6 @@
 import pytest
 
+from src.category import Order
 from src.product import Product
 
 
@@ -69,3 +70,17 @@ def test_category_add_smartphone(category, smartphone1):
 def test_category_add_lawn_grass(category, lawn_grass2):
     category.add_product(lawn_grass2)
     assert category.product_count == 27
+
+
+def test_order_init(second_product):
+    order1 = Order(second_product, 2)
+    assert order1.cost == 420000.0
+
+
+def test_order_str(first_product):
+    order = Order(first_product, 1)
+    assert str(order) == ('Товар: Samsung Galaxy S23 Ultra, \n'
+                          'Описание: 256GB, Серый цвет, 200MP камера, \n'
+                          'Количество: 1 шт., \n'
+                          'Цена за 1 единицу: 180000.0 руб., \n'
+                          'Общая стоимость: 180000.0')
