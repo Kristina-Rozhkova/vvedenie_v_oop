@@ -25,6 +25,13 @@ def test_add_product(category):
     assert category.product_count == 7
 
 
+def test_add_product_error(category):
+    """Тестирование выпадения ошибки при добавлении продукта в список продуктов"""
+    with pytest.raises(TypeError) as ex:
+        category.add_product(1)
+    assert str(ex.value) == "Нужно добавить продукт из класса Product или из его дочерних классов"
+
+
 def test_category_products(category):
     """Тестирование вывода информации о продуктах"""
     information = category.products
@@ -52,3 +59,13 @@ def test_product_iterator(product_iterator):
 
     iterator = product_iterator.__iter__()
     assert product_iterator.index == 0
+
+
+def test_category_add_smartphone(category, smartphone1):
+    category.add_product(smartphone1)
+    assert category.product_count == 23
+
+
+def test_category_add_lawn_grass(category, lawn_grass2):
+    category.add_product(lawn_grass2)
+    assert category.product_count == 27

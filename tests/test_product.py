@@ -62,3 +62,46 @@ def test_product_str(first_product):
 def test_product_add(first_product, second_product):
     result = first_product + second_product
     assert result == 2580000.0
+
+
+def test_product_add_error(first_product, lawn_grass2):
+    with pytest.raises(TypeError) as ex:
+        first_product + lawn_grass2
+    assert str(ex.value) == "К продукту класса Product можно добавить только продукт класса Product"
+
+
+def test_smartphone_init(smartphone1):
+    assert smartphone1.name == "Iphone 15"
+    assert smartphone1.efficiency == 98.2
+    assert smartphone1.model == "15"
+    assert smartphone1.memory == 512
+    assert smartphone1.color == "Gray space"
+
+
+def test_smartphone_add(smartphone1, smartphone2):
+    result = smartphone1 + smartphone2
+    assert result == 2114000.0
+
+
+def test_smartphone_add_error(smartphone1, first_product):
+    with pytest.raises(TypeError) as ex:
+        smartphone1 + first_product
+    assert str(ex.value) == "К продукту класса Smartphone можно добавить только продукт класса Smartphone"
+
+
+def test_lawn_grass_init(lawn_grass1):
+    assert lawn_grass1.name == "Газонная трава"
+    assert lawn_grass1.country == "Россия"
+    assert lawn_grass1.germination_period == "7 дней"
+    assert lawn_grass1.color == "Зеленый"
+
+
+def test_lawn_grass_add(lawn_grass1, lawn_grass2):
+    result = lawn_grass1 + lawn_grass2
+    assert result == 16750.0
+
+
+def test_lawn_grass_add_error(lawn_grass1, smartphone1):
+    with pytest.raises(TypeError) as ex:
+        lawn_grass1 + smartphone1
+    assert str(ex.value) == "К продукту класса LawnGrass можно добавить только продукт класса LawnGrass"
