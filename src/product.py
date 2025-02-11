@@ -19,7 +19,10 @@ class Product:
         return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
 
     def __add__(self, other):
-        return self.__price * self.quantity + other.__price * other.quantity
+        if type(other) is Product:
+            return self.__price * self.quantity + other.__price * other.quantity
+        else:
+            raise TypeError("К продукту класса Product можно добавить только продукт класса Product")
 
     @classmethod
     def new_product(cls, user_product: dict, products: List[Any] = None):
@@ -58,3 +61,34 @@ class Product:
 
             else:
                 self.__price = new_price
+
+
+class Smartphone(Product):
+    def __init__(self, name: str, description: str, price: float, quantity: int, efficiency: float, model: str,
+                 memory: int, color: str):
+        super().__init__(name, description, price, quantity)
+        self.efficiency = efficiency
+        self.model = model
+        self.memory = memory
+        self.color = color
+
+    def __add__(self, other):
+        if type(other) is Smartphone:
+            return self.price * self.quantity + other.price * other.quantity
+        else:
+            raise TypeError("К продукту класса Smartphone можно добавить только продукт класса Smartphone")
+
+
+class LawnGrass(Product):
+    def __init__(self, name: str, description: str, price: float, quantity: int, country: str, germination_period: str,
+                 color: str):
+        super().__init__(name, description, price, quantity)
+        self.country = country
+        self.germination_period = germination_period
+        self.color = color
+
+    def __add__(self, other):
+        if type(other) is LawnGrass:
+            return self.price * self.quantity + other.price * other.quantity
+        else:
+            raise TypeError("К продукту класса LawnGrass можно добавить только продукт класса LawnGrass")
