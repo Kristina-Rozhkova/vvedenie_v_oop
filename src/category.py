@@ -3,6 +3,11 @@ from abc import ABC, abstractmethod
 from src.product import Product
 
 
+class ZeroQuantityProduct(Exception):
+    def __init__(self, message=None):
+        super().__init__(message)
+
+
 class BaseClass(ABC):
     @abstractmethod
     def __str__(self):
@@ -34,8 +39,17 @@ class Category(BaseClass):
 
     def add_product(self, product: Product):
         if isinstance(product, Product):
-            self.__products.append(product)
-            Category.product_count += 1
+            try:
+                if product.quantity == 0:
+                    raise ZeroQuantityProduct("Товар с нулевым количеством не может быть добавлен")
+            except ZeroQuantityProduct as e:
+                print(str(e))
+            else:
+                self.__products.append(product)
+                Category.product_count += 1
+                print("Товар успешно добавлен")
+            finally:
+                print("Обработка добавления товара завершена")
         else:
             raise TypeError("Нужно добавить продукт из класса Product или из его дочерних классов")
 
@@ -49,6 +63,14 @@ class Category(BaseClass):
     @property
     def products_in_list(self):
         return self.__products
+
+    def middle_price(self):
+        """Подсчитывает средний ценник всех товаров"""
+        try:
+            avg = sum([product.price for product in self.__products]) / len(self.__products)
+            return round(avg, 2)
+        except ZeroDivisionError:
+            return 0
 
 
 class ProductIterator:
@@ -81,11 +103,13 @@ class Order(BaseClass):
         self.cost = self.calculate_cost()
 
     def __str__(self):
-        return (f"Товар: {self.product.name}, \n"
-                f"Описание: {self.product.description}, \n"
-                f"Количество: {self.quantity} шт., \n"
-                f"Цена за 1 единицу: {self.product.price} руб., \n"
-                f"Общая стоимость: {self.cost}")
+        return (
+            f"Товар: {self.product.name}, \n"
+            f"Описание: {self.product.description}, \n"
+            f"Количество: {self.quantity} шт., \n"
+            f"Цена за 1 единицу: {self.product.price} руб., \n"
+            f"Общая стоимость: {self.cost}"
+        )
 
     def calculate_cost(self):
         return self.quantity * self.product.price

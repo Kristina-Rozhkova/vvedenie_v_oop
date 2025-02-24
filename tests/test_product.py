@@ -52,7 +52,7 @@ def test_product_price_setter_min_price(first_product):
 def test_product_price_setter_negative_price(capsys, first_product):
     first_product.price = -100
     message = capsys.readouterr()
-    assert message.out.strip().split('\n')[-1] == "Цена не должна быть нулевая или отрицательная"
+    assert message.out.strip().split("\n")[-1] == "Цена не должна быть нулевая или отрицательная"
 
 
 def test_product_str(first_product):
@@ -108,12 +108,17 @@ def test_lawn_grass_add_error(lawn_grass1, smartphone1):
 
 
 def test_print_mixin_product(capsys):
-    Product("55\" QLED 4K", "Фоновая подсветка", 123000.0, 7)
+    Product('55" QLED 4K', "Фоновая подсветка", 123000.0, 7)
     message = capsys.readouterr()
     assert message.out.strip() == 'Product(55" QLED 4K, Фоновая подсветка, 123000.0, 7)'
 
 
 def test_print_mixin_smartphone_and_lawn_grass(capsys, smartphone1, lawn_grass1):
     message = capsys.readouterr()
-    assert message.out.strip().split('\n')[0] == 'Smartphone(Iphone 15, 512GB, Gray space, 210000.0, 8)'
-    assert message.out.strip().split('\n')[1] == 'LawnGrass(Газонная трава, Элитная трава для газона, 500.0, 20)'
+    assert message.out.strip().split("\n")[0] == "Smartphone(Iphone 15, 512GB, Gray space, 210000.0, 8)"
+    assert message.out.strip().split("\n")[1] == "LawnGrass(Газонная трава, Элитная трава для газона, 500.0, 20)"
+
+
+def test_product_init_error(capsys):
+    with pytest.raises(ValueError, match="Товар с нулевым количеством не может быть добавлен"):
+        Product("Бракованный товар", "Неверное количество", 1000.0, 0)

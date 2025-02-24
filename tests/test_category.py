@@ -1,6 +1,6 @@
 import pytest
 
-from src.category import Order
+from src.category import Order, ZeroQuantityProduct
 from src.product import Product
 
 
@@ -79,8 +79,27 @@ def test_order_init(second_product):
 
 def test_order_str(first_product):
     order = Order(first_product, 1)
-    assert str(order) == ('Товар: Samsung Galaxy S23 Ultra, \n'
-                          'Описание: 256GB, Серый цвет, 200MP камера, \n'
-                          'Количество: 1 шт., \n'
-                          'Цена за 1 единицу: 180000.0 руб., \n'
-                          'Общая стоимость: 180000.0')
+    assert str(order) == (
+        "Товар: Samsung Galaxy S23 Ultra, \n"
+        "Описание: 256GB, Серый цвет, 200MP камера, \n"
+        "Количество: 1 шт., \n"
+        "Цена за 1 единицу: 180000.0 руб., \n"
+        "Общая стоимость: 180000.0"
+    )
+
+
+def test_middle_price(category, category_without_products):
+    """Подсчет среднего ценника товаров в категории"""
+    assert category.middle_price() == 140333.33
+
+    assert category_without_products.middle_price() == 0
+
+
+def test_add_product_with_zero_quantity_error(capsys, category):
+    """Проверка добавления продукта с выбрасыванием исключения ZeroQuantityProduct"""
+    category.add_product(Product("Бракованный товар", "Неверное количество", 1000.0, 0))
+    with pytest.raises(ZeroQuantityProduct, match="Товар с нулевым количеством не может быть добавлен"):
+        category.add_product(Product("Бракованный товар", "Неверное количество", 1000.0, 0))
+    message = capsys.readouterr()
+    assert message.out.strip().split("\n")[-2] == "Товар с нулевым количеством не может быть добавлен"
+    assert message.out.strip().split("\n")[-1] == "Обработка добавления товара завершена"
