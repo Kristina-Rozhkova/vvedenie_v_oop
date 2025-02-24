@@ -1,7 +1,15 @@
+from abc import ABC, abstractmethod
+
 from src.product import Product
 
 
-class Category:
+class BaseClass(ABC):
+    @abstractmethod
+    def __str__(self):
+        pass
+
+
+class Category(BaseClass):
     """Класс с информацией о товарах в соответствующей категории"""
 
     name: str
@@ -60,3 +68,24 @@ class ProductIterator:
             return product
         else:
             raise StopIteration
+
+
+class Order(BaseClass):
+    product: Product
+    quantity: int
+    cost: float
+
+    def __init__(self, product, quantity):
+        self.product = product
+        self.quantity = quantity
+        self.cost = self.calculate_cost()
+
+    def __str__(self):
+        return (f"Товар: {self.product.name}, \n"
+                f"Описание: {self.product.description}, \n"
+                f"Количество: {self.quantity} шт., \n"
+                f"Цена за 1 единицу: {self.product.price} руб., \n"
+                f"Общая стоимость: {self.cost}")
+
+    def calculate_cost(self):
+        return self.quantity * self.product.price
